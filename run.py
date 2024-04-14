@@ -33,13 +33,14 @@ def run_inference(model, left_file, right_file):
     padding_y = target_height - height
     left_tensor = F.pad(left_tensor, (0, padding_x, 0, padding_y))
     right_tensor = F.pad(right_tensor, (0, padding_x, 0, padding_y))
-
+    print("Moving to GPU")
     # Move model and inputs to GPU.
     model.cuda()
     model.eval()
     left_tensor = left_tensor.cuda()
     right_tensor = right_tensor.cuda()
-
+    print(next(model.parameters()).device)
+    print("doing forward")
     # Do forward pass on model and get output.
     with torch.no_grad():
         output, all_outputs = model(left_tensor, right_tensor)
@@ -47,6 +48,7 @@ def run_inference(model, left_file, right_file):
     disparity_small = output["disparity_small"]
     matchability = output.get("matchability", None)
 
+    print("finished forward")
     scale = disparity.shape[3] // disparity_small.shape[3]
 
     # Generate visualizations for network output.
@@ -80,5 +82,5 @@ if __name__ == "__main__":
     hparams = parser.parse_args()
 
     script = torch.jit.load(hparams.script)
-
+    print("Running interface")
     run_inference(script, hparams.left, hparams.right)

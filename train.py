@@ -27,6 +27,8 @@ if __name__ == "__main__":
     parser.add_argument("--print_config", action="store_true")
     parser.add_argument("--scratch", action="store_true")
     parser.add_argument("--override", type=str, nargs="+")
+    parser.add_argument("--resume_from_checkpoint", type=str, default=None, help="Path to a checkpoint file from which training will be resumed.")
+
     args = parser.parse_args()
 
     if args.override is not None and len(args.override) > 0:
@@ -67,9 +69,8 @@ if __name__ == "__main__":
     else:
         gpus = [0]
         accelerator = None
-
-    log_every_n_steps = 50
-
+    
+    log_every_n_steps = 50 
     trainer = pl.Trainer(callbacks=callbacks,
                          logger=loggers,
                          max_epochs=hparams.epochs,
@@ -78,6 +79,7 @@ if __name__ == "__main__":
                          deterministic=False,
                          precision=precision,
                          accelerator=accelerator,
-                         log_every_n_steps=log_every_n_steps)
+                         log_every_n_steps=log_every_n_steps,
+                         resume_from_checkpoint=args.resume_from_checkpoint) 
 
     trainer.fit(stereo_model, data_module)

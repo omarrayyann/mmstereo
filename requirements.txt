@@ -16,7 +16,6 @@ idna==3.2
 kornia==0.5.10
 Markdown==3.3.4
 multidict==5.1.0
-numpy==1.21.2
 oauthlib==3.1.1
 omegaconf==2.1.1
 opencv-python==4.5.3.56

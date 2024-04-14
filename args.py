@@ -39,7 +39,7 @@ class TransformConfig(object):
 @dataclass
 class StageConfig(object):
     datasets: List[DatasetConfig] = field(default_factory=lambda: [])
-    transform: TransformConfig = TransformConfig()
+    transform: TransformConfig = field(default_factory=TransformConfig)
 
     """Shuffle batches during loading"""
     shuffle: bool = False
@@ -51,8 +51,8 @@ class StageConfig(object):
 
 @dataclass
 class DataConfig(object):
-    train: StageConfig = StageConfig()
-    val: StageConfig = StageConfig()
+    train: StageConfig = field(default_factory=StageConfig)
+    val: StageConfig = field(default_factory=StageConfig)
 
 
 @dataclass
@@ -99,12 +99,12 @@ class OptimizerConfig(object):
 
 @dataclass
 class TrainingConfig(object):
-    data: DataConfig = DataConfig()
+    data: DataConfig = field(default_factory=DataConfig)
 
-    model: ModelConfig = ModelConfig()
+    model: ModelConfig = field(default_factory=ModelConfig)
 
-    loss: LossConfig = LossConfig()
-    optimizer: OptimizerConfig = OptimizerConfig()
+    loss: LossConfig = field(default_factory=LossConfig)
+    optimizer: OptimizerConfig = field(default_factory=OptimizerConfig)
 
     """Number of epochs for training"""
     epochs: int = MISSING
